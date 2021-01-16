@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:foreground="@drawable/border_shape"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:hint="Please Choose A CSV file" />
+
+        <Button
+            android:id="@+id/button_choose_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="choose file" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_marginHorizontal="10dp"
+        android:layout_width="match_parent"
+        android:paddingBottom="5dp"
+        android:layout_weight="1"
+        android:layout_height="0.0dip">
+    <TextView
+        android:gravity="center"
+        android:id="@+id/tv_list_of_object"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    </ScrollView>
+    <Button
+        android:id="@+id/btn_send_sms"
+        android:layout_marginTop="10dp"
+        android:text="Send Message"
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_marginVertical="5dp"
+        android:textSize="12sp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/rafiulhassan007_gmail_com"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

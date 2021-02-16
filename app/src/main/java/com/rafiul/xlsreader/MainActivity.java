@@ -2,6 +2,7 @@ package com.rafiul.xlsreader;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -62,11 +63,19 @@ public class MainActivity extends AppCompatActivity {
 
         Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
         contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        contentSelectionIntent.setType("text/csv");
-
+        contentSelectionIntent.setType("text/csv|text/comma-separated-values|application/csv");
+        String[] mimetypes = {"text/csv", "text/comma-separated-values", "application/csv"};
+        contentSelectionIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
         chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
+
+//        Intent sendIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//        sendIntent.setType("text/csv|text/comma-separated-values|application/csv");
+//        String[] mimetypes = {"text/csv", "text/comma-separated-values", "application/csv"};
+//        sendIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+//        startActivity(Intent.createChooser(sendIntent, "Export CSV"));
 
     }
 
@@ -79,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             try {
-                getFileURI(data.getData());
+                getFileURI(data.getData(),new File(data.getData().getPath()));
+               // importFile(data.getData());
             } catch (Exception e) {
                 Toast.makeText(this, "Can't Read CSV File", Toast.LENGTH_SHORT).show();
             }
@@ -89,20 +99,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getFileURI(Uri data) {
+    private void getFileURI(Uri dataData, File data) {
+        Log.d("TAG", "getFileURI: "+data.getAbsolutePath());
         try {
-            String path = getPath(this, data);
-            File file = new File(path);
-            String filename = file.getName();
+            String filename = data.getName();
             tv_file_name.setText(filename);
-            importFile(data);
+            importFile(dataData);
         } catch (Exception e) {
             Log.d("Err", e.toString() + "");
         }
     }
 
     private void importFile(Uri data) throws Exception {
-        InputStream inputStream = getContentResolver().openInputStream(data);
+
+        InputStream inputStream= getContentResolver().openInputStream(data);
 
         if (inputStream == null) {
             throw new IOException("Unable to obtain input stream from URI");
@@ -132,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Information i : infoS) {
 
-                objectData.append("\n").append(i.getContact()).append("==").append(i.getText());
+            objectData.append("\n").append(i.getContact()).append("==").append(i.getText());
 
         }
         tv_list_of_object.setText(objectData);
@@ -162,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         for (Information inf : in) {
             smsNumbers.append(inf.getContact()).append(";");
         }
-        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(smsNumbers.toString().substring(0,smsNumbers.length()-1)));
+        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(smsNumbers.toString().substring(0, smsNumbers.length() - 1)));
         smsIntent.putExtra("sms_body", in.get(1).getText());
         startActivity(smsIntent);
     }
